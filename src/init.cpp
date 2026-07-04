@@ -5,16 +5,16 @@
 
 namespace fs = std::filesystem;
 
-void Repository::init() {
+void init() {
 
     if (fs::exists(".mygit")) {
         std::cout << "Repository already initialized\n";
         return;
     }
 
-    fs::create_directory(".mygit");
-    fs::create_directory(".mygit/objects");
-    fs::create_directory(".mygit/refs");
+    fs::create_directory(".minigit");
+    fs::create_directory(".minigit/objects");
+    fs::create_directory(".minigit/refs");
 
     std::ofstream head(".mygit/HEAD");
     head << "refs/main";

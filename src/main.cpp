@@ -1,4 +1,6 @@
-#include "../include/repository.h"
+#include "../include/init.h"
+#include "../include/status.h"
+#include "../include/add.h"
 #include <iostream>
 #include <string>
 
@@ -11,11 +13,26 @@ int main(int argc, char* argv[]) {
 
     std::string command = argv[1];
 
-    Repository repo;
+
 
     if (command == "init") {
-        repo.init();
+        init();
     }
+     
+    else if (command == "status") {
+        status();
+    }
+
+    else if(command == "add")
+    {
+        if(argc < 3)
+        {
+            std::cout << "Usage: minigit add <filename>\n";
+            return 1;
+        }
+
+        add(argv[2]);
+        }
     else {
         std::cout << "Unknown command\n";
     }
