@@ -1,6 +1,7 @@
 #include "../include/init.h"
 #include "../include/status.h"
 #include "../include/add.h"
+#include "../include/commit.h"
 #include <iostream>
 #include <string>
 
@@ -34,16 +35,16 @@ int main(int argc, char* argv[]) {
         add(argv[2]);
         }
     
-    // else if(command == "commit")
-    //     {
-    //         if(argc < 4)
-    //         {
-    //             std::cout << "Usage: minigit commit -m \"message\"\n";
-    //             return 1;
-    //         }
+    else if(command == "commit")
+        {
+            if(argc < 4 || std::string(argv[2]) != "-m")
+            {
+                std::cout << "Usage: minigit commit -m \"message\"\n";
+                return 1;
+            }
 
-    //         commit(argv[3]);
-    //     }
+            commit(argv[3]);
+        }
 
 
     else {

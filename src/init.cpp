@@ -15,6 +15,7 @@ void init() {
 
     fs::create_directory(".minigit");
     fs::create_directory(".minigit/objects");
+    fs::create_directory(".minigit/commits");
     fs::create_directory(".minigit/refs");
 
     std::ofstream head(".minigit/HEAD");
@@ -31,6 +32,10 @@ void init() {
     std::ofstream nextObject(".minigit/next_object");
     nextObject << 1;
     nextObject.close();
+
+    std::ofstream nextCommit(".minigit/next_commit");
+    nextCommit << 1;
+    nextCommit.close();
 
     std::cout << "Initialized empty MiniGit repository\n";
 }
