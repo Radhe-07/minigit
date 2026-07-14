@@ -2,9 +2,23 @@
 #include <iostream>
 #include <fstream>
 #include <filesystem>
-#include <unordered_set> 
+#include <unordered_map>
 
 namespace fs = std::filesystem;
+
+std::string getNextObjectId(){
+      std::ifstream input(".minigit/next_object");
+
+    int id;
+    input >> id;
+    input.close();
+
+    std::ofstream output(".minigit/next_object");
+    output << (id + 1);
+    output.close();
+
+    return "object" + std::to_string(id);
+};
 
 void add(const std::string& filename)
 {   
@@ -20,29 +34,56 @@ void add(const std::string& filename)
         return;
     }
 
-    std::unordered_set<std::string> tracked;
+    // Read file content
+    std::ifstream input(filename);
+
+    std::string content(
+        (std::istreambuf_iterator<char>(input)),
+        std::istreambuf_iterator<char>()
+    );
+
+    // get object id
+    std::string objectId = getNextObjectId();
+
+    //create obj file
+    std::ofstream objectFile(
+    ".minigit/objects/" + objectId
+    );
+
+    objectFile << content;
+    objectFile.close();
+
+
+
+    std::unordered_map<std::string, std::string> tracked;
+
     if(fs::exists(".minigit/index"))
         {
-            std::ifstream indexFile(".minigit/index");
+        std::ifstream indexFile(".minigit/index");
 
-            std::string line;
+        std::string trackedFile;
+        std::string trackedObject;
 
-            while(std::getline(indexFile, line))
-            {
-                tracked.insert(line);
-            }
-        }
-    if(tracked.count(filename))
+        while(indexFile >> trackedFile >> trackedObject)
         {
-            std::cout << filename << " is already tracked\n";
-            return;
-        }    
-    
-    //Open for appending. Don't overwrite existing contents.
-    std::ofstream index(".minigit/index", std::ios::app);
-    index << filename << '\n';
-    index.close();
+            tracked[trackedFile] = trackedObject;
+        }
 
+        }
+
+        tracked[filename] = objectId;
+    
+        
+        std::ofstream index(".minigit/index");    
+        for(const auto& entry : tracked)
+        {
+            index << entry.first
+                << " "
+                << entry.second
+                << '\n';
+        }
+        index.close();
+  
     std::cout << "Added " << filename << '\n';
 
 
