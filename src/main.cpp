@@ -2,6 +2,7 @@
 #include "../include/status.h"
 #include "../include/add.h"
 #include "../include/commit.h"
+#include "../include/log.h"
 #include <iostream>
 #include <string>
 
@@ -45,7 +46,11 @@ int main(int argc, char* argv[]) {
 
             commit(argv[3]);
         }
-
+    
+    else if(command == "log")
+        {
+            log();
+        }
 
     else {
         std::cout << "Unknown command\n";
